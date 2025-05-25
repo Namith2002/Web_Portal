@@ -1,0 +1,45 @@
+/* Letter Avatar Styling */
+.letter-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.letter-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Profile Page Button Enhancements */
+.profile-card .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 200px;
+}
+
+.profile-card .btn i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.profile-card .btn-outline:hover {
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
+    transform: translateY(-3px);
+}

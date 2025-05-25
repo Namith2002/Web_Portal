@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="page-header">
+    <h1>Our Services</h1>
+    <p>Explore what we have to offer</p>
+</section>
+
+<section class="services-section">
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+            <h3>Web Development</h3>
+            <p>Professional web development services tailored to your needs. We create responsive, user-friendly websites that help your business grow.</p>
+            <a href="#" class="btn btn-outline">Learn More</a>
+        </div>
+        
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-mobile-alt"></i>
+            </div>
+            <h3>Mobile Applications</h3>
+            <p>Custom mobile application development for iOS and Android platforms. Create engaging mobile experiences for your users.</p>
+            <a href="#" class="btn btn-outline">Learn More</a>
+        </div>
+        
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>SEO Optimization</h3>
+            <p>Improve your online visibility with our SEO services. We help your website rank higher in search engine results.</p>
+            <a href="#" class="btn btn-outline">Learn More</a>
+        </div>
+        
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <h3>Digital Marketing</h3>
+            <p>Comprehensive digital marketing strategies to help you reach your target audience and grow your business online.</p>
+            <a href="#" class="btn btn-outline">Learn More</a>
+        </div>
+        
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-paint-brush"></i>
+            </div>
+            <h3>UI/UX Design</h3>
+            <p>User-centered design services that create intuitive and engaging user experiences for your digital products.</p>
+            <a href="#" class="btn btn-outline">Learn More</a>
+        </div>
+        
+        <div class="service-card">
+            <div class="service-icon">
+                <i class="fas fa-server"></i>
+            </div>
+            <h3>Cloud Services</h3>
+            <p>Reliable cloud hosting and management services to ensure your applications run smoothly and securely.</p>
+            <a href="#" class="btn btn-outline">Learn More</a>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-content">
+        <h2>Need a Custom Solution?</h2>
+        <p>Contact our team to discuss your specific requirements and how we can help you achieve your goals.</p>
+        <a href="{{ url_for('contact') }}" class="btn btn-primary">Contact Us</a>
+    </div>
+</section>
+{% endblock %}

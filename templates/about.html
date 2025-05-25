@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="page-header">
+    <h1>About Us</h1>
+    <p>Learn more about our web portal and our mission</p>
+</section>
+
+<section class="about-section">
+    <div class="about-content">
+        <h2>Our Story</h2>
+        <p>Founded with a vision to create a comprehensive online platform, our web portal aims to provide users with easy access to information, services, and resources all in one place. We believe in simplifying the digital experience and making technology accessible to everyone.</p>
+        
+        <h2>Our Mission</h2>
+        <p>Our mission is to connect users with the resources they need through an intuitive, user-friendly interface. We strive to create a platform that is both informative and engaging, providing value to our users at every interaction.</p>
+        
+        <h2>Our Team</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <img src="{{ url_for('static', filename='img/team1.svg') }}" alt="Team Member 1">
+                <h3>Jane Smith</h3>
+                <p>Founder & CEO</p>
+            </div>
+            <div class="team-member">
+                <img src="{{ url_for('static', filename='img/team2.svg') }}" alt="Team Member 2">
+                <h3>John Doe</h3>
+                <p>CTO</p>
+            </div>
+            <div class="team-member">
+                <img src="{{ url_for('static', filename='img/team3.svg') }}" alt="Team Member 3">
+                <h3>Sarah Johnson</h3>
+                <p>Head of Design</p>
+            </div>
+            <div class="team-member">
+                <img src="{{ url_for('static', filename='img/team4.svg') }}" alt="Team Member 4">
+                <h3>Michael Brown</h3>
+                <p>Lead Developer</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="values-section">
+    <h2>Our Values</h2>
+    <div class="values-grid">
+        <div class="value-item">
+            <i class="fas fa-user-shield"></i>
+            <h3>User Privacy</h3>
+            <p>We prioritize the privacy and security of our users' data above all else.</p>
+        </div>
+        <div class="value-item">
+            <i class="fas fa-universal-access"></i>
+            <h3>Accessibility</h3>
+            <p>We believe in creating platforms that are accessible to users of all abilities.</p>
+        </div>
+        <div class="value-item">
+            <i class="fas fa-lightbulb"></i>
+            <h3>Innovation</h3>
+            <p>We continuously strive to improve and innovate our services.</p>
+        </div>
+        <div class="value-item">
+            <i class="fas fa-handshake"></i>
+            <h3>Integrity</h3>
+            <p>We operate with honesty and transparency in all our dealings.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

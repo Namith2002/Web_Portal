@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+<div class="admin-container">
+    <!-- Admin Sidebar -->
+    <div class="admin-sidebar">
+        <h3>Admin Panel</h3>
+        <ul class="admin-menu">
+            <li><a href="{{ url_for('admin_dashboard') }}" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('admin_users') }}"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="{{ url_for('admin_messages') }}"><i class="fas fa-envelope"></i> Messages</a></li>
+            <li><a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i> My Profile</a></li>
+        </ul>
+    </div>
+
+    <!-- Admin Content -->
+    <div class="admin-content">
+        <div class="admin-header">
+            <h2>Dashboard</h2>
+            <div class="date">{{ current_date }}</div>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="dashboard-stats">
+            <div class="stat-card users">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>{{ stats.total_users }}</h3>
+                <p>Total Users</p>
+            </div>
+
+            <div class="stat-card messages">
+                <div class="stat-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <h3>{{ stats.total_messages }}</h3>
+                <p>Messages</p>
+            </div>
+
+            <div class="stat-card recent">
+                <div class="stat-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h3>{{ stats.new_users }}</h3>
+                <p>New Users (Last 7 Days)</p>
+            </div>
+        </div>
+
+        <!-- Recent Users -->
+        <div class="admin-table-container">
+            <h3 style="padding: 15px 20px; margin: 0; border-bottom: 1px solid #eee;">Recent Users</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in recent_users %}
+                    <tr>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <span class="user-role {{ user.role }}">{{ user.role }}</span>
+                        </td>
+                        <td>{{ user.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add active class to current menu item
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentLocation = window.location.pathname;
+        const menuItems = document.querySelectorAll('.admin-menu a');
+        
+        menuItems.forEach(item => {
+            if (item.getAttribute('href') === currentLocation) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    });
+</script>
+{% endblock %}

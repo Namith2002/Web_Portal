@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Welcome to Our Web Portal</h1>
+        <p>Your one-stop destination for information, services, and resources</p>
+        <div class="cta-buttons">
+            <a href="{{ url_for('services') }}" class="btn btn-primary">Our Services</a>
+            <a href="{{ url_for('contact') }}" class="btn btn-secondary">Contact Us</a>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="feature-container">
+        <div class="feature-box">
+            <i class="fas fa-users"></i>
+            <h3>Community</h3>
+            <p>Join our growing community of users and professionals.</p>
+        </div>
+        <div class="feature-box">
+            <i class="fas fa-cogs"></i>
+            <h3>Services</h3>
+            <p>Explore our wide range of professional services.</p>
+        </div>
+        <div class="feature-box">
+            <i class="fas fa-book"></i>
+            <h3>Resources</h3>
+            <p>Access valuable resources and information.</p>
+        </div>
+        <div class="feature-box">
+            <i class="fas fa-headset"></i>
+            <h3>Support</h3>
+            <p>Get 24/7 support from our dedicated team.</p>
+        </div>
+    </div>
+</section>
+
+<section class="about-preview">
+    <div class="about-content">
+        <h2>About Our Portal</h2>
+        <p>We are dedicated to providing a comprehensive platform that connects users with the information and services they need. Our mission is to simplify access to resources and create a seamless user experience.</p>
+        <a href="{{ url_for('about') }}" class="btn btn-outline">Learn More</a>
+    </div>
+    <div class="about-image">
+        <img src="{{ url_for('static', filename='img/about.svg') }}" alt="About Us">
+    </div>
+</section>
+
+<section class="testimonials">
+    <h2>What Our Users Say</h2>
+    <div class="testimonial-container">
+        <div class="testimonial">
+            <div class="testimonial-text">
+                <p>"This portal has transformed how I access information. Everything I need is now in one place!"</p>
+            </div>
+            <div class="testimonial-author">
+                <img src="{{ url_for('static', filename='img/user1.svg') }}" alt="User 1">
+                <h4>Jane Doe</h4>
+                <p>Regular User</p>
+            </div>
+        </div>
+        <div class="testimonial">
+            <div class="testimonial-text">
+                <p>"The services offered through this portal are top-notch. I've recommended it to all my colleagues."</p>
+            </div>
+            <div class="testimonial-author">
+                <img src="{{ url_for('static', filename='img/user2.svg') }}" alt="User 2">
+                <h4>John Smith</h4>
+                <p>Business Owner</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

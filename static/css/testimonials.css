@@ -1,0 +1,108 @@
+/* Testimonials Section Styling */
+.testimonials {
+    padding: 40px 0;
+    margin-bottom: 40px;
+}
+
+.testimonials h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--dark-color);
+    position: relative;
+    padding-bottom: 15px;
+    font-size: 2rem;
+}
+
+.testimonials h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary-color);
+}
+
+/* Vertical testimonial container */
+.testimonial-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.testimonial {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-text {
+    margin-bottom: 20px;
+    position: relative;
+    padding: 0 10px;
+}
+
+.testimonial-text p {
+    font-style: italic;
+    color: var(--secondary-color);
+    line-height: 1.6;
+    position: relative;
+    z-index: 1;
+}
+
+.testimonial-text::before {
+    content: '\201C';
+    font-size: 4rem;
+    color: rgba(0, 123, 255, 0.1);
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    z-index: 0;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.testimonial-author img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+    border: 3px solid rgba(0, 123, 255, 0.1);
+}
+
+.testimonial-author h4 {
+    margin: 0;
+    color: var(--dark-color);
+    font-size: 1.1rem;
+}
+
+.testimonial-author p {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .testimonial-container {
+        padding: 0 20px;
+    }
+}

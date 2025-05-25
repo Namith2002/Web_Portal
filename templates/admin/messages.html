@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+<div class="admin-container">
+    <!-- Admin Sidebar -->
+    <div class="admin-sidebar">
+        <h3>Admin Panel</h3>
+        <ul class="admin-menu">
+            <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('admin_users') }}"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="{{ url_for('admin_messages') }}" class="active"><i class="fas fa-envelope"></i> Messages</a></li>
+            <li><a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i> My Profile</a></li>
+        </ul>
+    </div>
+
+    <!-- Admin Content -->
+    <div class="admin-content">
+        <div class="admin-header">
+            <h2>Message Management</h2>
+        </div>
+
+        <!-- Messages Table -->
+        <div class="admin-table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in messages %}
+                    <tr>
+                        <td>{{ message.id }}</td>
+                        <td>{{ message.name }}</td>
+                        <td>{{ message.email }}</td>
+                        <td>{{ message.message|truncate(50) }}</td>
+                        <td>{{ message.created_at }}</td>
+                        <td class="action-buttons">
+                            <button class="action-btn view" data-id="{{ message.id }}" data-name="{{ message.name }}" data-email="{{ message.email }}" data-message="{{ message.message }}" data-date="{{ message.created_at }}"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn delete" data-id="{{ message.id }}" data-name="{{ message.name }}"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- View Message Modal -->
+<div class="admin-modal" id="viewModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>View Message</h3>
+            <button class="modal-close" id="closeViewModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="admin-form-group">
+                <label>From</label>
+                <p id="viewName" class="admin-form-control" style="background-color: #f8f9fa;"></p>
+            </div>
+            <div class="admin-form-group">
+                <label>Email</label>
+                <p id="viewEmail" class="admin-form-control" style="background-color: #f8f9fa;"></p>
+            </div>
+            <div class="admin-form-group">
+                <label>Date</label>
+                <p id="viewDate" class="admin-form-control" style="background-color: #f8f9fa;"></p>
+            </div>
+            <div class="admin-form-group">
+                <label>Message</label>
+                <div id="viewMessage" class="admin-form-control" style="background-color: #f8f9fa; min-height: 100px; white-space: pre-wrap;"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="closeViewBtn">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="admin-modal" id="deleteModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Confirm Delete</h3>
+            <button class="modal-close" id="closeDeleteModal">&times;</button>
+        </div>
+        <form id="deleteForm" action="{{ url_for('admin_delete_message') }}" method="post">
+            <div class="modal-body">
+                <input type="hidden" id="deleteMessageId" name="message_id">
+                <p>Are you sure you want to delete message from <strong id="deleteMessageName"></strong>?</p>
+                <p>This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="cancelDeleteBtn">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete Message</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add active class to current menu item
+        const currentLocation = window.location.pathname;
+        const menuItems = document.querySelectorAll('.admin-menu a');
+        
+        menuItems.forEach(item => {
+            if (item.getAttribute('href') === currentLocation) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+
+        // Modal functionality
+        const viewModal = document.getElementById('viewModal');
+        const deleteModal = document.getElementById('deleteModal');
+        const closeViewModal = document.getElementById('closeViewModal');
+        const closeViewBtn = document.getElementById('closeViewBtn');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+        // View message buttons
+        const viewButtons = document.querySelectorAll('.action-btn.view');
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const email = this.getAttribute('data-email');
+                const message = this.getAttribute('data-message');
+                const date = this.getAttribute('data-date');
+
+                document.getElementById('viewName').textContent = name;
+                document.getElementById('viewEmail').textContent = email;
+                document.getElementById('viewMessage').textContent = message;
+                document.getElementById('viewDate').textContent = date;
+
+                viewModal.classList.add('active');
+            });
+        });
+
+        // Delete message buttons
+        const deleteButtons = document.querySelectorAll('.action-btn.delete');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const messageId = this.getAttribute('data-id');
+                const name = this.getAttribute('data-name');
+
+                document.getElementById('deleteMessageId').value = messageId;
+                document.getElementById('deleteMessageName').textContent = name;
+
+                deleteModal.classList.add('active');
+            });
+        });
+
+        // Close modals
+        closeViewModal.addEventListener('click', function() {
+            viewModal.classList.remove('active');
+        });
+
+        closeViewBtn.addEventListener('click', function() {
+            viewModal.classList.remove('active');
+        });
+
+        closeDeleteModal.addEventListener('click', function() {
+            deleteModal.classList.remove('active');
+        });
+
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteModal.classList.remove('active');
+        });
+    });
+</script>
+{% endblock %}

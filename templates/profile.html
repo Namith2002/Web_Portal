@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="page-header">
+    <h1>My Profile</h1>
+    <p>Manage your account information</p>
+</section>
+
+<section class="profile-section">
+    <div class="profile-container">
+        <div class="profile-sidebar">
+            <div class="profile-image">
+                <div class="letter-avatar" title="{{ user.name }}">
+                    {{ user.name[0] | upper }}
+                </div>
+            </div>
+            <h2>{{ user.name }}</h2>
+            <p>{{ user.email }}</p>
+            <p class="member-since">Member since: {{ user.created_at }}</p>
+        </div>
+        
+        <div class="profile-content">
+            <div class="profile-card">
+                <h3>Account Information</h3>
+                <div class="profile-info">
+                    <div class="info-group">
+                        <label>Name:</label>
+                        <p>{{ user.name }}</p>
+                    </div>
+                    <div class="info-group">
+                        <label>Email:</label>
+                        <p>{{ user.email }}</p>
+                    </div>
+                </div>
+                <a href="{{ url_for('edit_profile') }}" class="btn btn-outline" title="Edit your profile information"><i class="fas fa-user-edit"></i> Edit Profile</a>
+            </div>
+            
+            <div class="profile-card">
+                <h3>Security</h3>
+                <div class="profile-info">
+                    <div class="info-group">
+                        <label>Password:</label>
+                        <p>********</p>
+                    </div>
+                </div>
+                <a href="{{ url_for('change_password') }}" class="btn btn-outline" title="Update your password"><i class="fas fa-key"></i> Change Password</a>
+            </div>
+            
+            <div class="profile-card">
+                <h3>Activity</h3>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <div>
+                            <p>Last login: Today at 10:30 AM</p>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <p>Messages sent: 5</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

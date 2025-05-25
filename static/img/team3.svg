@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="90" fill="#f0f4f8"/>
+  
+  <!-- Head -->
+  <circle cx="100" cy="85" r="40" fill="#ffe0bd"/>
+  
+  <!-- Hair -->
+  <path d="M60 85 Q70 45, 100 45 Q130 45, 140 85" fill="#ffcc00" stroke="none"/>
+  <path d="M140 85 Q130 95, 100 95 Q70 95, 60 85" fill="#ffcc00" stroke="none"/>
+  <path d="M60 85 Q60 95, 60 105 Q60 115, 70 115" fill="#ffcc00" stroke="none"/>
+  <path d="M140 85 Q140 95, 140 105 Q140 115, 130 115" fill="#ffcc00" stroke="none"/>
+  
+  <!-- Eyes -->
+  <circle cx="85" cy="80" r="5" fill="#333"/>
+  <circle cx="115" cy="80" r="5" fill="#333"/>
+  
+  <!-- Smile -->
+  <path d="M85 100 Q100 115, 115 100" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+  
+  <!-- Body/Suit -->
+  <path d="M70 125 Q100 140, 130 125 L140 180 Q100 190, 60 180 Z" fill="#9b59b6"/>
+  
+  <!-- Collar -->
+  <path d="M85 125 L100 140 L115 125" fill="none" stroke="#fff" stroke-width="2"/>
+  
+  <!-- Design Element - Paintbrush -->
+  <path d="M130 140 L150 120" fill="none" stroke="#333" stroke-width="2"/>
+  <path d="M150 120 L155 115" fill="none" stroke="#333" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Name Label -->
+  <rect x="50" y="150" width="100" height="20" rx="5" fill="#fff" opacity="0.7"/>
+  <text x="100" y="165" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" fill="#333">Sarah Johnson - Design</text>
+</svg>

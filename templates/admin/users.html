@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
+<div class="admin-container">
+    <!-- Admin Sidebar -->
+    <div class="admin-sidebar">
+        <h3>Admin Panel</h3>
+        <ul class="admin-menu">
+            <li><a href="{{ url_for('admin_dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li><a href="{{ url_for('admin_users') }}" class="active"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="{{ url_for('admin_messages') }}"><i class="fas fa-envelope"></i> Messages</a></li>
+            <li><a href="{{ url_for('profile') }}"><i class="fas fa-user-circle"></i> My Profile</a></li>
+        </ul>
+    </div>
+
+    <!-- Admin Content -->
+    <div class="admin-content">
+        <div class="admin-header">
+            <h2>User Management</h2>
+            <button class="btn btn-primary" id="addUserBtn"><i class="fas fa-user-plus"></i> Add New User</button>
+        </div>
+
+        <!-- Users Table -->
+        <div class="admin-table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            <span class="user-role {{ user.role }}">{{ user.role }}</span>
+                        </td>
+                        <td>{{ user.created_at }}</td>
+                        <td class="action-buttons">
+                            <button class="action-btn edit" data-id="{{ user.id }}" data-name="{{ user.name }}" data-email="{{ user.email }}" data-role="{{ user.role }}"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete" data-id="{{ user.id }}" data-name="{{ user.name }}"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit User Modal -->
+<div class="admin-modal" id="userModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Add New User</h3>
+            <button class="modal-close" id="closeModal">&times;</button>
+        </div>
+        <form id="userForm" action="{{ url_for('admin_users') }}" method="post">
+            <div class="modal-body">
+                <input type="hidden" id="userId" name="user_id">
+                <div class="admin-form-group">
+                    <label for="userName">Name</label>
+                    <input type="text" class="admin-form-control" id="userName" name="name" required>
+                </div>
+                <div class="admin-form-group">
+                    <label for="userEmail">Email</label>
+                    <input type="email" class="admin-form-control" id="userEmail" name="email" required>
+                </div>
+                <div class="admin-form-group">
+                    <label for="userPassword">Password</label>
+                    <input type="password" class="admin-form-control" id="userPassword" name="password">
+                    <small class="form-text text-muted">Leave blank to keep current password when editing</small>
+                </div>
+                <div class="admin-form-group">
+                    <label for="userRole">Role</label>
+                    <select class="admin-form-select" id="userRole" name="role">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="cancelBtn">Cancel</button>
+                <button type="submit" class="btn btn-primary" id="saveUserBtn">Save User</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="admin-modal" id="deleteModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Confirm Delete</h3>
+            <button class="modal-close" id="closeDeleteModal">&times;</button>
+        </div>
+        <form id="deleteForm" action="{{ url_for('admin_delete_user') }}" method="post">
+            <div class="modal-body">
+                <input type="hidden" id="deleteUserId" name="user_id">
+                <p>Are you sure you want to delete user <strong id="deleteUserName"></strong>?</p>
+                <p>This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" id="cancelDeleteBtn">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete User</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add active class to current menu item
+        const currentLocation = window.location.pathname;
+        const menuItems = document.querySelectorAll('.admin-menu a');
+        
+        menuItems.forEach(item => {
+            if (item.getAttribute('href') === currentLocation) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+
+        // Modal functionality
+        const userModal = document.getElementById('userModal');
+        const deleteModal = document.getElementById('deleteModal');
+        const addUserBtn = document.getElementById('addUserBtn');
+        const closeModal = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const modalTitle = document.getElementById('modalTitle');
+        const userForm = document.getElementById('userForm');
+        const deleteForm = document.getElementById('deleteForm');
+
+        // Edit user buttons
+        const editButtons = document.querySelectorAll('.action-btn.edit');
+        editButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = this.getAttribute('data-id');
+                const userName = this.getAttribute('data-name');
+                const userEmail = this.getAttribute('data-email');
+                const userRole = this.getAttribute('data-role');
+
+                document.getElementById('userId').value = userId;
+                document.getElementById('userName').value = userName;
+                document.getElementById('userEmail').value = userEmail;
+                document.getElementById('userPassword').value = '';
+                document.getElementById('userRole').value = userRole;
+
+                modalTitle.textContent = 'Edit User';
+                userModal.classList.add('active');
+            });
+        });
+
+        // Delete user buttons
+        const deleteButtons = document.querySelectorAll('.action-btn.delete');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const userId = this.getAttribute('data-id');
+                const userName = this.getAttribute('data-name');
+
+                document.getElementById('deleteUserId').value = userId;
+                document.getElementById('deleteUserName').textContent = userName;
+
+                deleteModal.classList.add('active');
+            });
+        });
+
+        // Add new user
+        addUserBtn.addEventListener('click', function() {
+            document.getElementById('userId').value = '';
+            document.getElementById('userName').value = '';
+            document.getElementById('userEmail').value = '';
+            document.getElementById('userPassword').value = '';
+            document.getElementById('userRole').value = 'user';
+
+            modalTitle.textContent = 'Add New User';
+            userModal.classList.add('active');
+        });
+
+        // Close modals
+        closeModal.addEventListener('click', function() {
+            userModal.classList.remove('active');
+        });
+
+        cancelBtn.addEventListener('click', function() {
+            userModal.classList.remove('active');
+        });
+
+        closeDeleteModal.addEventListener('click', function() {
+            deleteModal.classList.remove('active');
+        });
+
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteModal.classList.remove('active');
+        });
+    });
+</script>
+{% endblock %}
