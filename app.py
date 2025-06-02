@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, g, abort
+from flask import Flask, render_template, request, redirect, url_for, flash, session, g, abort, jsonify
 import sqlite3
 import os
 import datetime
@@ -354,6 +354,97 @@ def admin_delete_message():
     flash('Message deleted successfully', 'success')
     return redirect(url_for('admin_messages'))
 
+# Add these imports at the top of the file
+import google.generativeai as genai
+import json
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Get Gemini API key from environment variable
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    print("Warning: GEMINI_API_KEY not found in environment variables")
+
+genai.configure(api_key=GEMINI_API_KEY)
+
+# Initialize the Gemini model - using the correct model name
+model = genai.GenerativeModel('gemini-1.5-flash')
+
+# Add this new route for the chatbot
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    data = request.get_json()
+    user_message = data.get('message', '')
+    
+    # Store user message in database if user is logged in
+    user_id = session.get('user_id')
+    
+    try:
+        # Generate response using Gemini API
+        response = model.generate_content(user_message)
+        bot_response = response.text
+        
+        # Store conversation in database if user is logged in
+        if user_id:
+            db = get_db()
+            db.execute('INSERT INTO chat_history (user_id, user_message, bot_response) VALUES (?, ?, ?)',
+                      [user_id, user_message, bot_response])
+            db.commit()
+        
+        return jsonify({'response': bot_response})
+    except Exception as e:
+        print(f"Error with Gemini API: {str(e)}")
+        return jsonify({'response': 'Sorry, I encountered an error. Please try again later.'}), 500
+
+# Add this new admin route to view chat history
+@app.route('/admin/chat-history')
+@admin_required
+def admin_chat_history():
+    db = get_db()
+    # Join with users table to get user names
+    chat_history = db.execute('''
+        SELECT ch.id, ch.user_message, ch.bot_response, ch.created_at, u.name as user_name 
+        FROM chat_history ch 
+        LEFT JOIN users u ON ch.user_id = u.id 
+        ORDER BY ch.created_at DESC
+    ''').fetchall()
+    
+    return render_template('admin/chat_history.html', title='Chat History', chat_history=chat_history)
+
+@app.route('/admin/delete-chat', methods=['POST'])
+@admin_required
+def admin_delete_chat():
+    chat_id = request.form.get('chat_id')
+    
+    if not chat_id:
+        flash('Invalid request', 'danger')
+        return redirect(url_for('admin_chat_history'))
+    
+    db = get_db()
+    db.execute('DELETE FROM chat_history WHERE id = ?', [chat_id])
+    db.commit()
+    
+    flash('Chat deleted successfully', 'success')
+    return redirect(url_for('admin_chat_history'))
+
+# Add this function after init_db function
+def migrate_db():
+    print('Checking database schema...')
+    db = get_db()
+    try:
+        # Try to query the role column to see if it exists
+        db.execute('SELECT role FROM users LIMIT 1')
+        print('Role column already exists')
+    except sqlite3.OperationalError:
+        print('Adding role column to users table...')
+        db.execute('ALTER TABLE users ADD COLUMN role TEXT DEFAULT \'user\'')
+        db.execute('UPDATE users SET role = \'admin\' WHERE email = \'admin@example.com\'')
+        db.commit()
+        print('Role column added successfully')
+
+# Then modify the main block to call this function
 if __name__ == '__main__':
     if not os.path.exists(app.config['DATABASE']):
         init_db()
@@ -366,5 +457,8 @@ if __name__ == '__main__':
                       ['Admin User', 'admin@example.com', generate_password_hash('admin123'), 'admin'])
             db.commit()
             print('Admin user created with email: admin@example.com and password: admin123')
+    else:
+        # Run migration to ensure schema is up to date
+        migrate_db()
             
     app.run(debug=True)

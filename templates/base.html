@@ -8,10 +8,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/testimonials.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatbot.css') }}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="{{ url_for('static', filename='js/profile.js') }}" defer></script>
     <script src="{{ url_for('static', filename='js/admin.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}" defer></script>
 </head>
 <body>
     <header>
@@ -95,6 +97,28 @@
             </div>
         </div>
     </footer>
+
+    <!-- Chatbot Toggle Button -->
+    <div class="chatbot-toggle">
+        <i class="fas fa-comment"></i>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container hidden">
+        <div class="chatbot-header">
+            <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="chatbot-body">
+            <!-- Chat messages will be added here dynamically -->
+        </div>
+        <div class="chatbot-footer">
+            <input type="text" class="chatbot-input" placeholder="Type your message...">
+            <button class="chatbot-send">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/enhanced.js') }}"></script>
